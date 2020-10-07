@@ -10,8 +10,12 @@ const app = express()
 
 
 //声明使用解析post请求的中间件
-app.use(express.urlencoded({extended:true}))
-app.use(express.json())  //解析josn结构 {name:1,age:2}
+// app.use(express.urlencoded({extended:true}))
+// app.use(express.json())  //解析josn结构 {name:1,age:2}
+
+var bodyParser = require('body-parser')
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 //可跨域
 app.use(require('cors')())
 //声明路由器中间件

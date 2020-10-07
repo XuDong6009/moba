@@ -12,10 +12,18 @@ const routes = [{
   component: Main,
   children: [{
       path: '/categories/create',
+      name:'CategoryCreate',
       component: CategoryEdit
     },
     {
+      path: '/categories/edit/:id',
+      name:'CategoryEdit',
+      component: CategoryEdit,
+      props:true  //将id 注入到props中
+    },
+    {
       path: '/categories/list',
+      name:'CategoryList',
       component: CategoryList
     }
   ]
