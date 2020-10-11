@@ -1,41 +1,50 @@
 //暴露路由
 const express = require('express')
-const router = express.Router()
+const {
+    deleteOne
+} = require('../models/User')
+const router = express.Router({
+    mergeParams: true
+})
+const app = express()
+app.set('secret', 'xudongdong')
 
-const categoryModel = require('../models/Category')
 
-//创建
-router.post('/categories', async (req, res) => {
-    const model = await categoryModel.create(req.body)
+const authMidWare = require('../midware/auth')
+
+//查找全部
+router.get('/', authMidWare(), async (req, res) => {
+    const model = await req.Model.find().populate('parent').limit(10)
     res.send(model)
 })
 
+
+
+//创建
+router.post('/', async (req, res) => {
+    const modal = await req.Model.create(req.body)
+    res.send(modal)
+})
+
 //更新
-router.put('/categories/:id', async (req, res) => {
-    const model = await categoryModel.findByIdAndUpdate(req.params.id,req.body)
+router.put('/:id', async (req, res) => {
+    const model = await req.Model.findByIdAndUpdate(req.params.id, req.body)
     res.send(model)
 })
 
 //根据id删除
-router.delete('/categories/:id', async (req, res) => {
-    const model = await categoryModel.findByIdAndDelete(req.params.id)
+router.delete('/:id', async (req, res) => {
+    const model = await req.Model.findByIdAndDelete(req.params.id)
     res.send(model)
 })
 
-
-
-//查找全部
-router.get('/categories', async (req, res) => {
-    const model = await categoryModel.find().limit(10)
-    res.send(model)
-})
 
 //根据id进行查找
-router.get('/categories/:id', async (req, res) => {
-    const id = req.params.id
-    const model = await categoryModel.findById(id)
+router.get('/:id', async (req, res) => {
+    const model = await req.Model.findById(req.params.id)
     res.send(model)
 })
+
 
 
 module.exports = router

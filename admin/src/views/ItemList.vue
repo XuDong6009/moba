@@ -1,8 +1,12 @@
 <template>
     <el-table :data="items">
         <el-table-column prop="_id" label="Id"></el-table-column>
-        <el-table-column prop="parent.name" label="上级分类"></el-table-column>
-        <el-table-column prop="name" label="分类名称"></el-table-column>
+        <el-table-column prop="name" label="物品名称"></el-table-column>
+         <el-table-column prop="icon" label="图片">
+               <template slot-scope="scope">
+                <img :src="scope.row.icon " alt="" height="60px">
+                </template>
+         </el-table-column>
         <el-table-column label="操作">
             <template slot-scope="scope">
                 <el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -24,7 +28,7 @@
         },
         methods: {
             async getList() {
-                const result = await this.$http.get('/reset/categories')
+                const result = await this.$http.get('/reset/items')
                 if (result.status === 200) {
                     this.items = result.data
                 }
@@ -33,7 +37,7 @@
                 const {
                     _id
                 } = item
-                this.$router.push(`/categories/edit/${_id}`)
+                this.$router.push(`/items/edit/${_id}`)
             },
             handleDelete(row) {
                 this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -41,7 +45,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(async () => {
-                    const result = await this.$http.delete(`/reset/categories/${row._id}`, {
+                    const result = await this.$http.delete(`/reset/items/${row._id}`, {
                         name: '1111'
                     })
                     debugger
